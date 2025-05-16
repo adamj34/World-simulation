@@ -2,6 +2,15 @@
 #include "Position.hpp"
 #include <string>
 
+/*
+power: zwiększa się co jedną turę o 1; decyduje o sile organizmu
+initiative: priorytet decyduje o kolejności wykonania ruchu w ramach jednej tury
+position: położenie w świecie
+liveLength: liczba tur do końca życia
+powerToReproduce: granica dolna siły, powyżej której może się rozmnażać; po rozmnożeniu traci połowę siły
+sign: znak reprezentujący organizm w świecie
+*/
+
 class Organism {
     private:
         int m_power{ 0 };

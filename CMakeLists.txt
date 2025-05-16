@@ -5,19 +5,6 @@ project(LivingWorld VERSION 1.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(include)
-
-add_library(worldlib 
-src/organisms/Animal.cpp
-src/organisms/Organism.cpp
-src/organisms/Plant.cpp
-src/Position.cpp  
-src/World.cpp
-)
-
-add_executable(main LivingWorld.cpp)
-target_link_libraries(main PRIVATE worldlib)
-
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
 
@@ -27,7 +14,38 @@ FetchContent_Declare(
   GIT_TAG        v3.4.0 
 )
 
-FetchContent_MakeAvailable(Catch2)
+FetchContent_Declare(
+  Boost
+  GIT_REPOSITORY https://github.com/boostorg/boost.git
+  GIT_TAG boost-1.87.0 
+)
+
+# Set Boost to include only the serialization library
+set(BOOST_INCLUDE_LIBRARIES serialization)
+set(BOOST_ENABLE_CMAKE ON)
+
+FetchContent_MakeAvailable(Catch2 Boost)
+
+include_directories(include ${Boost_INCLUDE_DIRS})
+
+add_library(worldlib 
+src/organisms/Organism.cpp
+src/organisms/Animal.cpp
+src/organisms/Plant.cpp
+src/organisms/Dandelion.cpp
+src/organisms/Grass.cpp
+src/organisms/Toadstool.cpp
+src/organisms/Wolf.cpp
+src/organisms/Sheep.cpp
+src/validators.cpp
+src/Position.cpp  
+src/World.cpp
+)
+target_link_libraries(worldlib PRIVATE Boost::serialization)
+
+add_executable(main LivingWorld.cpp)
+target_link_libraries(main PRIVATE worldlib)
+
 
 add_executable(tests 
   tests/World_test.cpp

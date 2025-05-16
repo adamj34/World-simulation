@@ -1,8 +1,13 @@
 #include <iostream>
+#include <print>
 #include "Position.hpp"
 #include "organisms/Organism.hpp"
 #include "organisms/Plant.hpp"
 #include "organisms/Animal.hpp"
+#include "organisms/Wolf.hpp"
+#include "organisms/Sheep.hpp"
+#include "organisms/Grass.hpp"
+#include "organisms/Toadstool.hpp"
 #include "World.hpp"
 
 using namespace std;
@@ -87,6 +92,16 @@ int main()
 	// // powrot do Tury 2
 	// world.readWorld("world.bin");
 	// cout << world.toString() << endl;
+
+	// Wolf org1{};
+    Sheep org2{};
+    // Grass org3{};
+    // Toadstool org4{};
+
+	// println("Organism 1: {}", org1.toString());
+	// println("Organism 2: {}", org2.toString());
+	// println("Organism 3: {}", org3.toString());
+	// println("Organism 4: {}", org4.toString());
 
 	return 0;
 }

@@ -9,6 +9,8 @@ class World {
     private:
         int m_worldX{ 6 };
         int m_worldY{ 6 };
+        int m_startWorldX{ 0 };
+        int m_startWorldY{ 0 };
         int m_turn{ 0 };
         std::vector<Organism> m_organisms{};
         char m_separator{ '.' };
@@ -18,15 +20,20 @@ class World {
         bool isPositionFree(Position position);
 
     public:
-        World(int worldX, int worldY);
+        World(int worldX, int worldY, int startWorldX = 0, int startWorldY = 0);
         World() = default;
 
+        int getStartWorldX() const;
+        void setStartWorldX(int startWorldX);
+        int getStartWorldY() const;
+        void setStartWorldY(int startWorldY);
         int getWorldX() const;
         void setWorldX(int worldX);
         int getWorldY() const;
         void setWorldY(int worldY);
 
         int getTurn() const;
+        const std::vector<Organism>& getOrganisms() const;
 
         void addOrganism(Organism organism);
         std::vector<Position> getVectorOfFreePositionsAround(const Position& position);

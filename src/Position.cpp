@@ -1,10 +1,12 @@
 #include "Position.hpp"
+#include "validators.hpp"
 #include <string>
-#include <stdexcept>
 
-Position::Position(int x, int y) {
-    setX(x);
-    setY(y);
+Position::Position(int x, int y)
+    : m_x{ x }
+    , m_y{ y } {
+    validators::validateValueNotNegative(x, "X coordinate");
+    validators::validateValueNotNegative(y, "Y coordinate");
 }
 
 int Position::getX() const {
@@ -12,9 +14,7 @@ int Position::getX() const {
 }
 
 void Position::setX(int x) {
-    if (x < 0) {
-        throw std::invalid_argument("X coordinate cannot be negative");
-    }
+    validators::validateValueNotNegative(x, "X coordinate");
     m_x = x;
 }
 
@@ -23,9 +23,7 @@ int Position::getY() const {
 }
 
 void Position::setY(int y) {
-    if (y < 0) {
-        throw std::invalid_argument("Y coordinate cannot be negative");
-    }
+    validators::validateValueNotNegative(y, "Y coordinate");
     m_y = y;
 }
 
@@ -33,9 +31,9 @@ std::string Position::toString() {
     return "(" + std::to_string(getX()) + ", " + std::to_string(getY()) + ")";
 }
 
-double Position::distance(Position position) const {
-    double dx = static_cast<double>(getX()) - static_cast<double>(position.getX());
-    double dy = static_cast<double>(getY()) - static_cast<double>(position.getY());
+double Position::distance(const Position& position) const {
+    double dx = static_cast<double>(this->getX()) - static_cast<double>(position.getX());
+    double dy = static_cast<double>(this->getY()) - static_cast<double>(position.getY());
     return std::sqrt((dx * dx) + (dy * dy));
 }
 

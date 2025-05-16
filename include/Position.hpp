@@ -31,6 +31,6 @@ class Position {
 
         std::string toString();
 
-        double distance(Position position) const;
+        double distance(const Position& position) const;
         void move(int dx, int dy);
 };
