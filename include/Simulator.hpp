@@ -1,0 +1,30 @@
+#pragma once
+
+#include "World.hpp"
+
+class Simulator {
+    private:
+        World m_world;
+        int m_turn{ 0 };
+        std::mt19937 m_rng{ std::random_device{}() };
+
+        int pickRandomPosition(const std::vector<Position>& positions);
+        void applyTurnRules(const std::vector<std::shared_ptr<Organism>>& organisms);
+
+        void playTurnForOrganism(const std::shared_ptr<Organism>& organism);
+
+        void performAttack(const std::shared_ptr<Organism>& organism);
+        void performReproduction(const std::shared_ptr<Organism>& organism, std::vector<Position>& freePositions);
+        void performMove(const std::shared_ptr<Organism>& organism, const std::vector<Position>& freePositions);
+
+
+    public:
+        explicit Simulator(World& world);
+
+        int getTurn() const;
+        void setTurn(int turn);
+
+        void playTurn();
+
+        void runSimulation(int numberOfTurns = 5);
+};

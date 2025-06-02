@@ -1,6 +1,9 @@
 #pragma once
+#include "LineageInfo.hpp"
 #include "Position.hpp"
 #include <string>
+#include <memory>
+#include <vector>
 
 /*
 power: zwiększa się co jedną turę o 1; decyduje o sile organizmu
@@ -17,8 +20,10 @@ class Organism {
         int m_initiative{ 0 };
         int m_liveLength{ 0 };
         int m_powerToReproduce{ 0 };
-        Position m_position{ 0, 0 };
         std::string m_species{ "O" };
+        std::string m_subspecies{ "O" };
+        Position m_position{ 0, 0 };
+        LineageInfo m_lineageInfo{};
 
     public:
         Organism(int power, int initiative, int liveLength, int powerToReproduce, Position position);
@@ -28,9 +33,11 @@ class Organism {
 
         // Copy constructor (Member-wise copy using copy constructors)
         Organism(const Organism&) = default;
-        
+
         // Copy assignment operator (Member-wise assignment using operator=)
         Organism& operator=(const Organism&) = default;
+
+        bool operator==(const Organism& other) const;
 
         virtual ~Organism() = default;
 
@@ -49,13 +56,29 @@ class Organism {
         Position getPosition() const;
         void setPosition(Position position);
 
+        LineageInfo getLineageInfo() const;
+        void setLineageInfo(LineageInfo lineageInfo);
+
         std::string getSpecies() const;
         void setSpecies(std::string spec);
 
-        // Test function to change x coordinate
-        void test_change_x(int x);
+        std::string getSubspecies() const;
+        void setSubspecies(std::string subspec);
+
+        bool canReproduce() const;
+
+        bool isAlive() const;
+
+        void setDeathTurn(int deathTurn);
+
+        std::vector<std::shared_ptr<Organism>> getAncestorHistory() const;
+
+        void printAncestorHistory() const;
 
         std::string toString() const;
 
-        virtual void move(int dx, int dy);
+        virtual void move(const Position& newPosition) = 0;
+        // virtual std::shared_ptr<Organism> clone() const = 0; // Pure virtual function for cloning
+        virtual std::optional<std::shared_ptr<Organism>> attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) = 0;
+        virtual std::optional<std::shared_ptr<Organism>> reproduce() = 0;
 };

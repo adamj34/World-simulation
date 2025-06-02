@@ -23,6 +23,7 @@ class Position {
         //     }
         //     return *this;
         // }
+        bool operator==(const Position& other) const;
 
         int getX() const;
         void setX(int x);
@@ -30,7 +31,6 @@ class Position {
         void setY(int y);
 
         std::string toString();
-
-        double distance(const Position& position) const;
+        
         void move(int dx, int dy);
 };

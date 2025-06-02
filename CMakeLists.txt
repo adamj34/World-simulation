@@ -26,7 +26,7 @@ set(BOOST_ENABLE_CMAKE ON)
 
 FetchContent_MakeAvailable(Catch2 Boost)
 
-include_directories(include ${Boost_INCLUDE_DIRS})
+include_directories(include)
 
 add_library(worldlib 
 src/organisms/Organism.cpp
@@ -37,23 +37,25 @@ src/organisms/Grass.cpp
 src/organisms/Toadstool.cpp
 src/organisms/Wolf.cpp
 src/organisms/Sheep.cpp
+src/organisms/LineageInfo.cpp
 src/validators.cpp
 src/Position.cpp  
 src/World.cpp
+src/Simulator.cpp
 )
 target_link_libraries(worldlib PRIVATE Boost::serialization)
 
 add_executable(main LivingWorld.cpp)
-target_link_libraries(main PRIVATE worldlib)
-
+target_link_libraries(main PRIVATE worldlib Boost::serialization)
 
 add_executable(tests 
   tests/World_test.cpp
   tests/Position_test.cpp
   tests/Organism_test.cpp
+  tests/Serialization_test.cpp
 )
 
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain worldlib) 
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain worldlib Boost::serialization) 
 
 list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
 

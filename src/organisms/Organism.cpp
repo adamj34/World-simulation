@@ -1,5 +1,6 @@
 #include "organisms/Organism.hpp"
 #include "validators.hpp"
+#include <print>
 #include <string>
 
 Organism::Organism(Position position)
@@ -22,6 +23,12 @@ Organism::Organism(int power, int initiative, int liveLength, int powerToReprodu
     validators::validateValueNotNegative(initiative, "Initiative");
     validators::validateValueNotNegative(liveLength, "Live length");
     validators::validateValueNotNegative(powerToReproduce, "Power to reproduce");
+}
+
+bool Organism::operator==(const Organism& other) const {
+    return m_power == other.m_power && m_initiative == other.m_initiative && m_liveLength == other.m_liveLength &&
+           m_powerToReproduce == other.m_powerToReproduce && m_position == other.m_position &&
+           m_species == other.m_species;
 }
 
 int Organism::getPower() const {
@@ -63,6 +70,13 @@ void Organism::setPosition(Position position) {
     m_position = position;
 }
 
+LineageInfo Organism::getLineageInfo() const {
+    return m_lineageInfo;
+}
+void Organism::setLineageInfo(LineageInfo lineageInfo) {
+    m_lineageInfo = lineageInfo;
+}
+
 std::string Organism::getSpecies() const {
     return m_species;
 }
@@ -70,8 +84,43 @@ void Organism::setSpecies(std::string spec) {
     m_species = spec;
 }
 
-void Organism::move(int dx, int dy) {
-    m_position.move(dx, dy);
+std::string Organism::getSubspecies() const {
+    return m_subspecies;
+}
+void Organism::setSubspecies(std::string subspec) {
+    m_subspecies = subspec;
+}
+
+bool Organism::canReproduce() const {
+    return m_power >= m_powerToReproduce;
+}
+
+bool Organism::isAlive() const {
+    return m_lineageInfo.deathTurn == -1;
+}
+
+void Organism::setDeathTurn(int deathTurn) {
+    validators::validateValueNotNegative(deathTurn, "Death turn");
+    m_lineageInfo.deathTurn = deathTurn;
+}
+
+std::vector<std::shared_ptr<Organism>> Organism::getAncestorHistory() const {
+    std::vector<std::shared_ptr<Organism>> ancestors;
+    std::shared_ptr<Organism> current = m_lineageInfo.parent;
+    while (current) {
+        ancestors.push_back(current);
+        current = current->getLineageInfo().parent;
+    }
+
+    return ancestors;
+}
+
+void Organism::printAncestorHistory() const {
+    auto ancestors{ getAncestorHistory() };
+    for (const auto& ancestor : ancestors) {
+        std::println("Ancestor Born at turn: {}, died: {}", ancestor->getLineageInfo().birthTurn,
+                     ancestor->getLineageInfo().deathTurn);
+    }
 }
 
 std::string Organism::toString() const {
@@ -81,7 +130,3 @@ std::string Organism::toString() const {
            "}";
 }
 
-// Test function to change x coordinate
-void Organism::test_change_x(int x) {
-    m_position.setX(x);
-}

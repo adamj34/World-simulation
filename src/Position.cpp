@@ -9,6 +9,10 @@ Position::Position(int x, int y)
     validators::validateValueNotNegative(y, "Y coordinate");
 }
 
+bool Position::operator==(const Position& other) const {
+    return m_x == other.m_x && m_y == other.m_y;
+}
+
 int Position::getX() const {
     return m_x;
 }
@@ -27,17 +31,11 @@ void Position::setY(int y) {
     m_y = y;
 }
 
-std::string Position::toString() {
-    return "(" + std::to_string(getX()) + ", " + std::to_string(getY()) + ")";
-}
-
-double Position::distance(const Position& position) const {
-    double dx = static_cast<double>(this->getX()) - static_cast<double>(position.getX());
-    double dy = static_cast<double>(this->getY()) - static_cast<double>(position.getY());
-    return std::sqrt((dx * dx) + (dy * dy));
-}
-
 void Position::move(int dx, int dy) {
     setX(getX() + dx);
     setY(getY() + dy);
+}
+
+std::string Position::toString() {
+    return "(" + std::to_string(getX()) + ", " + std::to_string(getY()) + ")";
 }

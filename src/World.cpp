@@ -1,39 +1,86 @@
 #include "World.hpp"
+#include "Position.hpp"
+#include "organisms/Organism.hpp"
 #include "validators.hpp"
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
-std::string World::getOrganismFromPosition(int x, int y) {
-    for (const Organism& org : m_organisms) {
-        if (org.getPosition().getX() == x && org.getPosition().getY() == y) {
-            return org.getSpecies();
+std::vector<std::shared_ptr<Organism>> World::getOrganismsFromPosition(const Position& positionToCheck) {
+
+    std::vector<std::shared_ptr<Organism>> organismsAtPosition{};
+    for (const auto& organism : m_organisms) {
+        if (organism->getPosition().getX() == positionToCheck.getX() &&
+            organism->getPosition().getY() == positionToCheck.getY()) {
+            organismsAtPosition.push_back(organism);
         }
     }
-    return "";
+
+    return organismsAtPosition;
 }
 
 bool World::isPositionOnWorld(int x, int y) {
     return (x >= 0 && y >= 0 && x < getWorldX() && y < getWorldY());
 }
 
-bool World::isPositionFree(Position position) {
-    return getOrganismFromPosition(position.getX(), position.getY()).empty();
+bool World::isPositionFree(const Position& position) {
+    return getOrganismsFromPosition(position).empty();
 }
 
-std::vector<Position> World::getVectorOfFreePositionsAround(const Position& position) {
-    int pos_x = position.getX(), pos_y = position.getY();
+bool World::isPositionAnimalFree(const Position& position) {
+    auto organismsAtPosition = getOrganismsFromPosition(position);
+    if (!organismsAtPosition.empty()) {
+        for (const auto& organism : organismsAtPosition) {
+            if (organism->getSpecies() == "A") {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+std::vector<Position> World::getPositionsAround(const std::shared_ptr<Organism>& organism) {
+    auto organismPosition = organism->getPosition();
+    int pos_x = organismPosition.getX();
+    int pos_y = organismPosition.getY();
     std::vector<Position> result{};
-    for (int x = -1; x < 2; ++x)
-        for (int y = -1; y < 2; ++y)
+    for (int x = -1; x < 2; ++x) {
+        for (int y = -1; y < 2; ++y) {
             if ((x != 0 || y != 0) && isPositionOnWorld(pos_x + x, pos_y + y)) {
                 result.push_back(Position(pos_x + x, pos_y + y));
             }
-    auto iter = remove_if(result.begin(), result.end(), [this](Position pos) { return !isPositionFree(pos); });
-    result.erase(iter, result.end());
-
+        }
+    }
     return result;
+}
+
+std::vector<Position> World::getFreePositionsAround(std::vector<Position> positionsAround) {
+    // It moves all elements for which the predicate is false to the beginning of the range,
+    // points to the new logical end of the range containing the elements that were not "removed"
+    auto iter = std::remove_if(positionsAround.begin(), positionsAround.end(),
+                          [this](Position pos) { return !isPositionFree(pos); });
+    positionsAround.erase(iter, positionsAround.end());
+
+    return positionsAround;
+}
+
+std::vector<Position> World::getAnimalFreePositionsAround(std::vector<Position> positionsAround) {
+
+    auto iter = std::remove_if(positionsAround.begin(), positionsAround.end(),
+                          [this](Position pos) { return !isPositionAnimalFree(pos); });
+    positionsAround.erase(iter, positionsAround.end());
+
+    return positionsAround;
+}
+
+std::vector<Position> World::getValidPositionsAround(const std::shared_ptr<Organism>& organism) {
+    auto positionsAround = getPositionsAround(organism);
+    if (organism->getSpecies() == "A") {
+        return getAnimalFreePositionsAround(positionsAround);
+    } else {
+        return getFreePositionsAround(positionsAround);
+    }
 }
 
 World::World(int worldX, int worldY, int startWorldX, int startWorldY)
@@ -77,52 +124,68 @@ void World::setWorldY(int worldY) {
     m_worldY = worldY;
 }
 
-int World::getTurn() const {
-    return m_turn;
-}
-
-const std::vector<Organism>& World::getOrganisms() const {
+const std::vector<std::shared_ptr<Organism>>& World::getOrganisms() const {
     return m_organisms;
 }
-
-void World::addOrganism(Organism organism) {
-    auto insertPos = std::find_if(m_organisms.begin(), m_organisms.end(), [&organism](const Organism& vec_org) {
-        return vec_org.getInitiative() < organism.getInitiative();
-    });
-
-    m_organisms.insert(insertPos, std::move(organism));
+void World::setOrganisms(const std::vector<std::shared_ptr<Organism>>& organisms) {
+    m_organisms = organisms;
 }
 
-void World::makeTurn() {
-    std::vector<Position> newPositions{};
-    int numberOfNewPositions{ 0 };
-    int randomIndex{ 0 };
+void World::addOrganism(std::shared_ptr<Organism> organism) {
+    auto insertPos =
+        std::find_if(m_organisms.begin(), m_organisms.end(), [&](const std::shared_ptr<Organism>& vec_org) {
+            return vec_org->getInitiative() < organism->getInitiative();
+        });
 
-    srand(time(0));
-    for (auto& org : m_organisms) {
-        newPositions = getVectorOfFreePositionsAround(org.getPosition());
-        numberOfNewPositions = newPositions.size();
-        if (numberOfNewPositions > 0) {
-            randomIndex = rand() % numberOfNewPositions;
-            org.setPosition(newPositions[randomIndex]);
-        }
-    }
-    m_turn++;
+    m_organisms.insert(insertPos, organism);
+}
+
+
+
+bool World::isOrganismDead(const std::shared_ptr<Organism>& organism) {
+    return organism->getLiveLength() <= 0 || organism->getLineageInfo().deathTurn != -1;
+}
+
+void World::removeDeadOrganisms() {
+    auto iter = std::remove_if(m_organisms.begin(), m_organisms.end(),
+                               [this](const std::shared_ptr<Organism>& org) { return isOrganismDead(org); });
+    m_organisms.erase(iter, m_organisms.end());
+}
+
+void World::markOrganismAsDead(std::shared_ptr<Organism>& organism, int deathTurn) {
+    organism->setDeathTurn(deathTurn);
 }
 
 std::string World::toString() {
-    std::string result{ "\nturn: " + std::to_string(getTurn()) + "\n" };
-    std::string spec{};
+    std::string result{};
+    std::vector<std::shared_ptr<Organism>> spec;
 
     for (int wY = 0; wY < getWorldY(); ++wY) {
         for (int wX = 0; wX < getWorldX(); ++wX) {
-            spec = getOrganismFromPosition(wX, wY);
-            if (spec != "")
-                result += spec;
-            else
+            spec = getOrganismsFromPosition(Position(wX, wY));
+            if (!spec.empty()) {
+                result += spec.front()->getSubspecies();
+            } else {
                 result += m_separator;
+            }
         };
         result += "\n";
     }
     return result;
+}
+
+bool World::operator==(const World& other) const {
+    if (m_worldX != other.m_worldX || m_worldY != other.m_worldY || m_startWorldX != other.m_startWorldX ||
+        m_startWorldY != other.m_startWorldY || m_separator != other.m_separator ||
+        m_organisms.size() != other.m_organisms.size()) {
+        return false;
+    }
+
+    for (int i = 0; i < m_organisms.size(); ++i) {
+        if (!(*m_organisms[i] == *other.m_organisms[i])) {
+            return false;
+        }
+    }
+
+    return true;
 }

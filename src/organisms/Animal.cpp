@@ -2,23 +2,27 @@
 
 Animal::Animal(int power, int initiative, int liveLength, int powerToReproduce, Position position)
     : Organism(power, initiative, liveLength, powerToReproduce, position) {
-    setSpecies("A");
+    setSubspecies("A");
 }
 
 Animal::Animal(Position position)
     : Organism(position) {
-    setSpecies("A");
+    setSubspecies("A");
 }
 
 Animal::Animal(int power, Position position)
     : Organism(power, position) {
-    setSpecies("A");
+    setSubspecies("A");
 }
 
 Animal::Animal()
     : Organism() {
-    setSpecies("A");
+    setSubspecies("A");
 }
 
-void Animal::move(int dx, int dy) {
+void Animal::move(const Position& newPosition) {
+    // Position currentPosition = getPosition();
+    // currentPosition.move(dx, dy);
+    // setPosition(currentPosition);
+    setPosition(newPosition);
 }

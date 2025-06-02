@@ -8,4 +8,7 @@ class Dandelion : public Plant {
         Dandelion(int power, Position position);
         explicit Dandelion(Position position);
         Dandelion();
+
+        std::optional<std::shared_ptr<Organism>> attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) override;
+        std::optional<std::shared_ptr<Organism>> reproduce() override;
 };
