@@ -31,10 +31,8 @@ class Organism {
         explicit Organism(Position position);
         Organism() = default;
 
-        // Copy constructor (Member-wise copy using copy constructors)
         Organism(const Organism&) = default;
 
-        // Copy assignment operator (Member-wise assignment using operator=)
         Organism& operator=(const Organism&) = default;
 
         bool operator==(const Organism& other) const;
@@ -76,9 +74,9 @@ class Organism {
         void printAncestorHistory() const;
 
         std::string toString() const;
-
+        
         virtual void move(const Position& newPosition) = 0;
-        // virtual std::shared_ptr<Organism> clone() const = 0; // Pure virtual function for cloning
         virtual std::optional<std::shared_ptr<Organism>> attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) = 0;
         virtual std::optional<std::shared_ptr<Organism>> reproduce() = 0;
-};
+        virtual std::shared_ptr<Organism> clone() = 0;
+    };

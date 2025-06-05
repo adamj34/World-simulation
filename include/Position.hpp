@@ -12,17 +12,6 @@ class Position {
         Position(int x, int y);
         Position() = default;
 
-        // Compiler-generated copy constructor will be like:
-        // Position(const Position& other) : m_x(other.m_x), m_y(other.m_y) {}
-
-        // Compiler-generated copy assignment operator will be like:
-        // Position& operator=(const Position& other) {
-        //     if (this != &other) {
-        //         m_x = other.m_x;
-        //         m_y = other.m_y;
-        //     }
-        //     return *this;
-        // }
         bool operator==(const Position& other) const;
 
         int getX() const;

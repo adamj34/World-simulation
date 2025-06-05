@@ -7,15 +7,19 @@ Sheep::Sheep(int power, int initiative, int liveLength, int powerToReproduce, Po
 }
 
 Sheep::Sheep(int power, Position position)
-    : Sheep(power, 3, 10, 6, position) {
+    : Sheep(power, 3, 10, 6, std::move(position)) {
 }
 
 Sheep::Sheep(Position position)
-    : Sheep(3, position) {
+    : Sheep(3, std::move(position)) {
 }
 
 Sheep::Sheep()
     : Sheep(Position{ 0, 0 }) {
+}
+
+Sheep::Sheep(const Sheep& other)
+    : Sheep(3, other.getInitiative(), 10, other.getPowerToReproduce(), other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Sheep::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
@@ -29,12 +33,6 @@ std::optional<std::shared_ptr<Organism>> Sheep::attack(std::vector<std::shared_p
     return std::nullopt; 
 }
 
-std::optional<std::shared_ptr<Organism>> Sheep::reproduce() {
-    // Sheep can reproduce if they have enough power
-    if (this->canReproduce()) {
-        setPower(getPower() / 2);
-        std::shared_ptr<Organism> newSheep = std::make_shared<Sheep>();
-        return newSheep;
-    }
-    return std::nullopt;
+std::shared_ptr<Organism> Sheep::clone() {
+    return std::make_shared<Sheep>(*this);
 }

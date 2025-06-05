@@ -21,15 +21,13 @@ int Simulator::pickRandomPosition(const std::vector<Position>& positions) {
 }
 
 void Simulator::applyTurnRules(const std::vector<std::shared_ptr<Organism>>& organisms) {
-    for (const auto& organism : organisms) {
-        organism->setPower(organism->getPower() + 1);
-        organism->setLiveLength(organism->getLiveLength() - 1);
-    }
+    m_world.increaseOrganismsPowerBy(1);
+    m_world.decreaseOrganismsLiveLengthBy(1);
     m_world.removeDeadOrganisms();
 }
 
 void Simulator::playTurnForOrganism(const std::shared_ptr<Organism>& organism) {
-    if (!organism->isAlive()) {
+    if (!m_world.organismCanPlayTurn(organism)) {
         return; // Skip organisms that were already killed in this turn
     }
     

@@ -8,7 +8,8 @@ class Toadstool : public Plant {
         Toadstool(int power, Position position);
         explicit Toadstool(Position position);
         Toadstool();
+        Toadstool(const Toadstool& other);
 
         std::optional<std::shared_ptr<Organism>> attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) override;
-        std::optional<std::shared_ptr<Organism>> reproduce() override;
+        std::shared_ptr<Organism> clone() override;
 };

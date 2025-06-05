@@ -38,6 +38,7 @@ src/organisms/Toadstool.cpp
 src/organisms/Wolf.cpp
 src/organisms/Sheep.cpp
 src/organisms/LineageInfo.cpp
+src/organisms/OrganismFactory.cpp
 src/validators.cpp
 src/Position.cpp  
 src/World.cpp

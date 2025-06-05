@@ -41,12 +41,15 @@ class World {
         const std::vector<std::shared_ptr<Organism>>& getOrganisms() const;
         void setOrganisms(const std::vector<std::shared_ptr<Organism>>& organisms);
 
-        void markOrganismAsDead(std::shared_ptr<Organism>& organism, int deathTurn);
+        void markOrganismAsDead(const std::shared_ptr<Organism>& organism, int deathTurn);
         void addOrganism(std::shared_ptr<Organism> organism);
         std::vector<std::shared_ptr<Organism>> getOrganismsFromPosition(const Position& positionToCheck);
         std::vector<Position> getPositionsAround(const std::shared_ptr<Organism>& organism);
         std::vector<Position> getValidPositionsAround(const std::shared_ptr<Organism>& organism);
         void removeDeadOrganisms();
+        bool organismCanPlayTurn(const std::shared_ptr<Organism>& organism) const;
+        void increaseOrganismsPowerBy(int increment);
+        void decreaseOrganismsLiveLengthBy(int decrement);
 
         std::string toString();
 };

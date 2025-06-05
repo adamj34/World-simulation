@@ -6,12 +6,12 @@ Animal::Animal(int power, int initiative, int liveLength, int powerToReproduce, 
 }
 
 Animal::Animal(Position position)
-    : Organism(position) {
+    : Organism(std::move(position)) {
     setSubspecies("A");
 }
 
 Animal::Animal(int power, Position position)
-    : Organism(power, position) {
+    : Organism(power, std::move(position)) {
     setSubspecies("A");
 }
 
@@ -21,8 +21,14 @@ Animal::Animal()
 }
 
 void Animal::move(const Position& newPosition) {
-    // Position currentPosition = getPosition();
-    // currentPosition.move(dx, dy);
-    // setPosition(currentPosition);
     setPosition(newPosition);
+}
+
+std::optional<std::shared_ptr<Organism>> Animal::reproduce() {
+    if (this->canReproduce()) {
+        auto offspring { this->clone() };
+        setPower(getPower() / 2);
+        return offspring;
+    }
+    return std::nullopt;
 }

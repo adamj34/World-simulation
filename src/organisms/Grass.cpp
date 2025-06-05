@@ -18,16 +18,15 @@ Grass::Grass()
     : Grass(Position{ 0, 0 }) {
 }
 
+Grass::Grass(const Grass& other)
+    : Grass(0, other.getInitiative(), 6, other.getPowerToReproduce(), other.getPosition()) {
+}
+
 std::optional<std::shared_ptr<Organism>> Grass::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
     // Grass does not attack
     return std::nullopt;
 }
 
-std::optional<std::shared_ptr<Organism>> Grass::reproduce() {
-    if (this->canReproduce()) {
-        setPower(getPower() / 2);
-        std::shared_ptr<Organism> newGrass = std::make_shared<Grass>();
-        return newGrass;
-    }
-    return std::nullopt;
+std::shared_ptr<Organism> Grass::clone() {
+    return std::make_shared<Grass>(*this);
 }

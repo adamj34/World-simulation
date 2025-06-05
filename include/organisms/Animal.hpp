@@ -10,7 +10,8 @@ class Animal : public Organism {
         virtual ~Animal() = default;
 
         void move(const Position& newPosition) override;
-
+        std::optional<std::shared_ptr<Organism>> reproduce() override;
+        
         std::optional<std::shared_ptr<Organism>> attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) override = 0;
-        std::optional<std::shared_ptr<Organism>> reproduce() override = 0;
+        std::shared_ptr<Organism> clone() override = 0;
 };

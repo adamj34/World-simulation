@@ -140,8 +140,6 @@ void World::addOrganism(std::shared_ptr<Organism> organism) {
     m_organisms.insert(insertPos, organism);
 }
 
-
-
 bool World::isOrganismDead(const std::shared_ptr<Organism>& organism) {
     return organism->getLiveLength() <= 0 || organism->getLineageInfo().deathTurn != -1;
 }
@@ -152,8 +150,24 @@ void World::removeDeadOrganisms() {
     m_organisms.erase(iter, m_organisms.end());
 }
 
-void World::markOrganismAsDead(std::shared_ptr<Organism>& organism, int deathTurn) {
+void World::markOrganismAsDead(const std::shared_ptr<Organism>& organism, int deathTurn) {
     organism->setDeathTurn(deathTurn);
+}
+
+bool World::organismCanPlayTurn(const std::shared_ptr<Organism>& organism) const {
+    return organism->isAlive();
+}
+
+void World::increaseOrganismsPowerBy(int increment) {
+    for (const auto& organism : m_organisms) {
+        organism->setPower(organism->getPower() + increment);
+    }
+}
+
+void World::decreaseOrganismsLiveLengthBy(int decrement) {
+    for (const auto& organism : m_organisms) {
+        organism->setLiveLength(organism->getLiveLength() - decrement);
+    }
 }
 
 std::string World::toString() {
@@ -182,6 +196,10 @@ bool World::operator==(const World& other) const {
     }
 
     for (int i = 0; i < m_organisms.size(); ++i) {
+        if (typeid(*m_organisms[i]) != typeid(*other.m_organisms[i])) {
+            return false;
+        }
+
         if (!(*m_organisms[i] == *other.m_organisms[i])) {
             return false;
         }

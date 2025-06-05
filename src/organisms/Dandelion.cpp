@@ -18,17 +18,15 @@ Dandelion::Dandelion()
     : Dandelion(Position{ 0, 0 }) {
 }
 
+Dandelion::Dandelion(const Dandelion& other)
+    : Dandelion(0, other.getInitiative(), 6, other.getPowerToReproduce(), other.getPosition()) {
+}
+
 std::optional<std::shared_ptr<Organism>> Dandelion::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
     // Dandelions do not attack
     return std::nullopt;
 }
 
-std::optional<std::shared_ptr<Organism>> Dandelion::reproduce() {
-    // Dandelions can reproduce if they have enough power
-    if (this->canReproduce()) {
-        setPower(getPower() / 2);
-        std::shared_ptr<Organism> newDandelion = std::make_shared<Dandelion>();
-        return newDandelion;
-    }
-    return std::nullopt;
+std::shared_ptr<Organism> Dandelion::clone() {
+    return std::make_shared<Dandelion>(*this);
 }

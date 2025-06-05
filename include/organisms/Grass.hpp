@@ -8,8 +8,8 @@ class Grass : public Plant {
         Grass(int power, Position position);
         explicit Grass(Position position);
         Grass();
+        Grass(const Grass& other);
 
         std::optional<std::shared_ptr<Organism>> attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) override;
-        std::optional<std::shared_ptr<Organism>> reproduce() override;
-
+        std::shared_ptr<Organism> clone() override;
 };

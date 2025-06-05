@@ -4,12 +4,12 @@
 #include <string>
 
 Organism::Organism(Position position)
-    : m_position{ position } {
+    : m_position{ std::move(position) } {
 }
 
 Organism::Organism(int power, Position position)
     : m_power{ power }
-    , m_position{ position } {
+    , m_position{ std::move(position) } {
     validators::validateValueNotNegative(power, "Power");
 }
 

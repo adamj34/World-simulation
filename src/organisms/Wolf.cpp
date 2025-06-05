@@ -7,15 +7,19 @@ Wolf::Wolf(int power, int initiative, int liveLength, int powerToReproduce, Posi
 }
 
 Wolf::Wolf(int power, Position position)
-    : Wolf(power, 5, 20, 16, position) {
+    : Wolf(power, 5, 20, 16, std::move(position)) {
 }
 
 Wolf::Wolf(Position position)
-    : Wolf(8, position) {
+    : Wolf(8, std::move(position)) {
 }
 
 Wolf::Wolf()
     : Wolf(Position{ 0, 0 }) {
+}
+
+Wolf::Wolf(const Wolf& other)
+    : Wolf(8, other.getInitiative(), 20, other.getPowerToReproduce(), other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Wolf::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
@@ -30,12 +34,6 @@ std::optional<std::shared_ptr<Organism>> Wolf::attack(std::vector<std::shared_pt
     return std::nullopt; 
 }
 
-std::optional<std::shared_ptr<Organism>> Wolf::reproduce() {
-    // Wolves can reproduce if they have enough power
-    if (this->canReproduce()) {
-        setPower(getPower() / 2);
-        std::shared_ptr<Organism> newWolf = std::make_shared<Wolf>();
-        return newWolf;
-    }
-    return std::nullopt;
+std::shared_ptr<Organism> Wolf::clone() {
+    return std::make_shared<Wolf>(*this);
 }

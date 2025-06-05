@@ -24,7 +24,7 @@
 #include "organisms/Toadstool.hpp"
 #include "organisms/Wolf.hpp"
 
-// Make Position, Organism, and World "split-free" so we can define separate save() and load()
+// separate to save() and load()
 BOOST_SERIALIZATION_SPLIT_FREE(Position)
 BOOST_SERIALIZATION_SPLIT_FREE(LineageInfo)
 BOOST_SERIALIZATION_SPLIT_FREE(World)

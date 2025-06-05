@@ -1,16 +1,18 @@
 #include "Simulator.hpp"
 #include "World.hpp"
 #include "serialization.hpp"
+#include "organisms/OrganismFactory.hpp"
 #include <catch2/catch_test_macros.hpp>
-#include <string> // Required for std::string
+#include <string> 
 
 TEST_CASE("World serialization and deserialization", "[World]") {
     World world{ 10, 10, 0, 0 };
+    OrganismFactory factory{};
 
-    auto wolf = std::make_shared<Wolf>(5, Position{ 1, 1 });
-    auto sheep = std::make_shared<Sheep>(3, Position{ 2, 2 });
-    auto grass = std::make_shared<Grass>(1, Position{ 3, 3 });
-    auto toadstool = std::make_shared<Toadstool>(2, Position{ 4, 4 });
+    auto wolf = factory.createWolf(Position{ 1, 1 });
+    auto sheep = factory.createSheep(Position{ 2, 2 });
+    auto grass = factory.createGrass(Position{ 3, 3 });
+    auto toadstool = factory.createToadstool(Position{ 4, 4 });
 
     world.addOrganism(wolf);
     world.addOrganism(sheep);
@@ -30,7 +32,6 @@ TEST_CASE("World serialization and deserialization", "[World]") {
 
     SECTION("World serialization and deserialization after making turns") {
 
-
         Simulator simulator{ world };
         simulator.playTurn();
 
@@ -40,8 +41,7 @@ TEST_CASE("World serialization and deserialization", "[World]") {
         World expectedWorldAtState1{};
         boost::serialization::loadWorld(expectedWorldAtState1, filename_section2);
 
-        simulator.playTurn();
-        simulator.playTurn();
+        simulator.runSimulation();
 
         boost::serialization::loadWorld(world, filename_section2);
 

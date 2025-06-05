@@ -7,15 +7,19 @@ Toadstool::Toadstool(int power, int initiative, int liveLength, int powerToRepro
 }
 
 Toadstool::Toadstool(int power, Position position)
-    : Toadstool(power, 0, 12, 4, position) {
+    : Toadstool(power, 0, 12, 4, std::move(position)) {
 }
 
 Toadstool::Toadstool(Position position)
-    : Toadstool(0, position) {
+    : Toadstool(0, std::move(position)) {
 }
 
 Toadstool::Toadstool()
     : Toadstool(Position{ 0, 0 }) {
+}
+
+Toadstool::Toadstool(const Toadstool& other)
+    : Toadstool(0, other.getInitiative(), 12, other.getPowerToReproduce(), other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Toadstool::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
@@ -28,11 +32,7 @@ std::optional<std::shared_ptr<Organism>> Toadstool::attack(std::vector<std::shar
     return std::nullopt; 
 }
 
-std::optional<std::shared_ptr<Organism>> Toadstool::reproduce() {
-    if (this->canReproduce()) {
-        setPower(getPower() / 2);
-        std::shared_ptr<Organism> newToadstool = std::make_shared<Toadstool>();
-        return newToadstool;
-    }
-    return std::nullopt;
+std::shared_ptr<Organism> Toadstool::clone() {
+    return std::make_shared<Toadstool>(*this);
 }
+
