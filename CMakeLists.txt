@@ -44,6 +44,7 @@ src/Position.cpp
 src/World.cpp
 src/Simulator.cpp
 )
+
 target_link_libraries(worldlib PRIVATE Boost::serialization)
 
 add_executable(main LivingWorld.cpp)

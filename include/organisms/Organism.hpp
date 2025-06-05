@@ -1,4 +1,5 @@
 #pragma once
+
 #include "LineageInfo.hpp"
 #include "Position.hpp"
 #include <string>

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 std::vector<std::shared_ptr<Organism>> World::getOrganismsFromPosition(const Position& positionToCheck) {
 
@@ -56,8 +57,6 @@ std::vector<Position> World::getPositionsAround(const std::shared_ptr<Organism>&
 }
 
 std::vector<Position> World::getFreePositionsAround(std::vector<Position> positionsAround) {
-    // It moves all elements for which the predicate is false to the beginning of the range,
-    // points to the new logical end of the range containing the elements that were not "removed"
     auto iter = std::remove_if(positionsAround.begin(), positionsAround.end(),
                           [this](Position pos) { return !isPositionFree(pos); });
     positionsAround.erase(iter, positionsAround.end());
@@ -145,8 +144,10 @@ bool World::isOrganismDead(const std::shared_ptr<Organism>& organism) {
 }
 
 void World::removeDeadOrganisms() {
+    // Removes all elements satisfying specific criteria from the range [first, last) and returns a past-the-end iterator for the new end of the range.
     auto iter = std::remove_if(m_organisms.begin(), m_organisms.end(),
                                [this](const std::shared_ptr<Organism>& org) { return isOrganismDead(org); });
+    // Erases the elements in the range [first, last) from the container.
     m_organisms.erase(iter, m_organisms.end());
 }
 
