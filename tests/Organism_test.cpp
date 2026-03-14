@@ -1,10 +1,11 @@
 #include "organisms/Organism.hpp"
 #include "organisms/OrganismFactory.hpp"
+#include "organisms/SpeciesCodes.hpp"
 #include "organisms/Wolf.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-const std::string WOLF_SPECIES = "W";
-const std::string SPECIES = "A";
+const SpeciesCodes WOLF_SPECIES = SpeciesCodes::Wolf;
+const SpeciesCodes SPECIES = SpeciesCodes::Animal;
 
 TEST_CASE("Organism class core functionality", "[Organism]") {
     OrganismFactory factory{};
@@ -148,8 +149,8 @@ TEST_CASE("Organism equality operator", "[Organism]") {
         Position pos{ 3, 4 };
         Wolf org1(5, pos);
         Wolf org2(5, pos);
-        org1.setSpecies("A");
-        org2.setSpecies("A");
+        org1.setSpecies(SpeciesCodes::Animal);
+        org2.setSpecies(SpeciesCodes::Animal);
         REQUIRE(org1 == org2);
     }
 
@@ -157,8 +158,8 @@ TEST_CASE("Organism equality operator", "[Organism]") {
         Position pos{ 3, 4 };
         Wolf org1(5, pos);
         Wolf org2(10, pos);
-        org1.setSpecies("A");
-        org2.setSpecies("A");
+        org1.setSpecies(SpeciesCodes::Animal);
+        org2.setSpecies(SpeciesCodes::Animal);
         REQUIRE(!(org1 == org2));
     }
 
@@ -168,16 +169,16 @@ TEST_CASE("Organism equality operator", "[Organism]") {
         Wolf org2(5, pos);
         org1.setInitiative(1);
         org2.setInitiative(2);
-        org1.setSpecies("A");
-        org2.setSpecies("A");
+        org1.setSpecies(SpeciesCodes::Animal);
+        org2.setSpecies(SpeciesCodes::Animal);
         REQUIRE(!(org1 == org2));
     }
 
     SECTION("Two organisms with different position are not equal") {
         Wolf org1(5, Position{ 3, 4 });
         Wolf org2(5, Position{ 5, 6 });
-        org1.setSpecies("A");
-        org2.setSpecies("A");
+        org1.setSpecies(SpeciesCodes::Animal);
+        org2.setSpecies(SpeciesCodes::Animal);
         REQUIRE(!(org1 == org2));
     }
 
@@ -185,8 +186,8 @@ TEST_CASE("Organism equality operator", "[Organism]") {
         Position pos{ 3, 4 };
         Wolf org1(5, pos);
         Wolf org2(5, pos);
-        org1.setSpecies("A");
-        org2.setSpecies("B");
+        org1.setSpecies(SpeciesCodes::Animal);
+        org2.setSpecies(SpeciesCodes::Plant);
         REQUIRE(!(org1 == org2));
     }
 }

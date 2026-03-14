@@ -1,23 +1,24 @@
 #include "organisms/Plant.hpp"
+#include "organisms/SpeciesCodes.hpp"
 
 Plant::Plant(int power, int initiative, int liveLength, int powerToReproduce, Position position)
     : Organism(power, initiative, liveLength, powerToReproduce, position) {
-    setSubspecies("P");
+    setSubspecies(SpeciesCodes::Plant);
 }
 
 Plant::Plant(int power, Position position)
     : Organism(power, std::move(position)) {
-    setSubspecies("P");
+    setSubspecies(SpeciesCodes::Plant);
 }
 
 Plant::Plant(Position position)
     : Organism(std::move(position)) {
-    setSubspecies("P");
+    setSubspecies(SpeciesCodes::Plant);
 }
 
 Plant::Plant()
     : Organism() {
-    setSubspecies("P");
+    setSubspecies(SpeciesCodes::Plant);
 }
 
 void Plant::move(const Position& newPosition) {

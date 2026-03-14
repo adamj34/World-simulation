@@ -1,9 +1,10 @@
 #include "organisms/Toadstool.hpp"
+#include "organisms/SpeciesCodes.hpp"
 
 Toadstool::Toadstool(int power, int initiative, int liveLength, int powerToReproduce, Position position)
     : Plant(power, initiative, liveLength, powerToReproduce, position) {
-    setSpecies("P");
-    setSubspecies("T");
+    setSpecies(SpeciesCodes::Plant);
+    setSubspecies(SpeciesCodes::Toadstool);
 }
 
 Toadstool::Toadstool(int power, Position position)
@@ -25,7 +26,7 @@ Toadstool::Toadstool(const Toadstool& other)
 std::optional<std::shared_ptr<Organism>> Toadstool::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
     // Toadstool kills sheep if they are in the same position
     for (const auto& organism : organismsToAttack) {
-        if (organism->getSubspecies() == "S") {
+        if (organism->getSubspecies() == SpeciesCodes::Sheep) {
             return organism;
         }
     }

@@ -3,6 +3,7 @@
 #include "organisms/Grass.hpp"
 #include "organisms/OrganismFactory.hpp"
 #include "organisms/Sheep.hpp"
+#include "organisms/SpeciesCodes.hpp"
 #include "organisms/Toadstool.hpp"
 #include "organisms/Wolf.hpp"
 #include "organisms/Lineage.hpp"
@@ -46,11 +47,11 @@ TEST_CASE("New organisms are added to the world in sorted order, according to th
     world.addOrganism(org3);
     world.addOrganism(org5);
 
-    REQUIRE(world.getOrganisms()[0]->getSubspecies() == "W");
-    REQUIRE(world.getOrganisms()[1]->getSubspecies() == "W");
-    REQUIRE(world.getOrganisms()[2]->getSubspecies() == "S");
-    REQUIRE(world.getOrganisms()[3]->getSubspecies() == "T");
-    REQUIRE(world.getOrganisms()[4]->getSubspecies() == "G");
+    REQUIRE(world.getOrganisms()[0]->getSubspecies() == SpeciesCodes::Wolf);
+    REQUIRE(world.getOrganisms()[1]->getSubspecies() == SpeciesCodes::Wolf);
+    REQUIRE(world.getOrganisms()[2]->getSubspecies() == SpeciesCodes::Sheep);
+    REQUIRE(world.getOrganisms()[3]->getSubspecies() == SpeciesCodes::Toadstool);
+    REQUIRE(world.getOrganisms()[4]->getSubspecies() == SpeciesCodes::Grass);
 }
 
 TEST_CASE("Dead organisms are removed from the world", "[World]") {
@@ -70,8 +71,8 @@ TEST_CASE("Dead organisms are removed from the world", "[World]") {
         world.removeDeadOrganisms();
 
         REQUIRE(world.getOrganisms().size() == 2);
-        REQUIRE(world.getOrganisms()[0]->getSubspecies() == "S");
-        REQUIRE(world.getOrganisms()[1]->getSubspecies() == "G");
+        REQUIRE(world.getOrganisms()[0]->getSubspecies() == SpeciesCodes::Sheep);
+        REQUIRE(world.getOrganisms()[1]->getSubspecies() == SpeciesCodes::Grass);
     }
 
     SECTION("Organism with live length 0 is removed") {
@@ -79,8 +80,8 @@ TEST_CASE("Dead organisms are removed from the world", "[World]") {
         world.removeDeadOrganisms();
 
         REQUIRE(world.getOrganisms().size() == 2);
-        REQUIRE(world.getOrganisms()[0]->getSubspecies() == "W");
-        REQUIRE(world.getOrganisms()[1]->getSubspecies() == "G");
+        REQUIRE(world.getOrganisms()[0]->getSubspecies() == SpeciesCodes::Wolf);
+        REQUIRE(world.getOrganisms()[1]->getSubspecies() == SpeciesCodes::Grass);
     }
 }
 
@@ -102,7 +103,7 @@ TEST_CASE("After an organism dies it is still present in ancestor history", "[Wo
 
     REQUIRE(world.getOrganisms().size() == 1);
     REQUIRE(LineageService::getAncestorHistory(*org2).size() == 1);
-    REQUIRE(LineageService::getAncestorHistory(*org2)[0]->getSubspecies() == "W");
+    REQUIRE(LineageService::getAncestorHistory(*org2)[0]->getSubspecies() == SpeciesCodes::Wolf);
 }
 
 TEST_CASE("Organisms kill other animals according to their attack capabilities", "[World]") {
@@ -120,7 +121,7 @@ TEST_CASE("Organisms kill other animals according to their attack capabilities",
         auto result = wolf->attack(world.getOrganismsFromPosition(sheep->getPosition()));
 
         REQUIRE(result.has_value());
-        REQUIRE(result.value()->getSubspecies() == "S");
+        REQUIRE(result.value()->getSubspecies() == SpeciesCodes::Sheep);
     }
 
     SECTION("Sheep cannot attack Wolf") {
@@ -156,7 +157,7 @@ TEST_CASE("Organisms kill other animals according to their attack capabilities",
         auto resultSheep = toadstool->attack(world.getOrganismsFromPosition(sheep->getPosition()));
 
         REQUIRE(resultSheep.has_value());
-        REQUIRE(resultSheep.value()->getSubspecies() == "S");
+        REQUIRE(resultSheep.value()->getSubspecies() == SpeciesCodes::Sheep);
     }
 
     SECTION("Sheep can attack Grass") {
@@ -165,7 +166,7 @@ TEST_CASE("Organisms kill other animals according to their attack capabilities",
         auto resultGrass = sheep->attack(world.getOrganismsFromPosition(grass->getPosition()));
 
         REQUIRE(resultGrass.has_value());
-        REQUIRE(resultGrass.value()->getSubspecies() == "G");
+        REQUIRE(resultGrass.value()->getSubspecies() == SpeciesCodes::Grass);
     }
 }
 
@@ -239,7 +240,7 @@ TEST_CASE("World organism retrieval from position", "[World]") {
         
         auto organisms = world.getOrganismsFromPosition(Position(3, 4));
         REQUIRE(organisms.size() == 1);
-        REQUIRE(organisms[0]->getSubspecies() == "W");
+        REQUIRE(organisms[0]->getSubspecies() == SpeciesCodes::Wolf);
     }
 
     SECTION("getOrganismsFromPosition returns multiple organisms at same position") {

@@ -2,6 +2,7 @@
 
 #include "Lineage.hpp"
 #include "Position.hpp"
+#include "SpeciesCodes.hpp"
 #include <string>
 #include <memory>
 #include <vector>
@@ -21,8 +22,8 @@ class Organism {
         int m_initiative{ 0 };
         int m_liveLength{ 0 };
         int m_powerToReproduce{ 0 };
-        std::string m_species{ "O" };
-        std::string m_subspecies{ "O" };
+        SpeciesCodes m_species{ SpeciesCodes::Unknown };
+        SpeciesCodes m_subspecies{ SpeciesCodes::Unknown };
         Position m_position{ 0, 0 };
         LineageInfo m_lineageInfo{};
 
@@ -62,11 +63,11 @@ class Organism {
         int getBirthTurn() const;
         int getDeathTurn() const;
 
-        std::string getSpecies() const;
-        void setSpecies(std::string spec);
+        SpeciesCodes getSpecies() const;
+        void setSpecies(SpeciesCodes spec);
 
-        std::string getSubspecies() const;
-        void setSubspecies(std::string subspec);
+        SpeciesCodes getSubspecies() const;
+        void setSubspecies(SpeciesCodes subspec);
 
         bool canReproduce() const;
 

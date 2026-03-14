@@ -19,7 +19,7 @@ class Position {
         int getY() const;
         void setY(int y);
 
-        std::string toString();
+        std::string toString() const;
         
         void move(int dx, int dy);
 };

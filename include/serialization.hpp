@@ -84,7 +84,7 @@ void load(Archive& ar, LineageInfo& lineage, const unsigned int version) {
 template <class Archive>
 void save(Archive& ar, const Organism& o, const unsigned int version) {
     int power{ o.getPower() };
-    std::string species{ o.getSpecies() };
+    SpeciesCodes species{ o.getSpecies() };
     int initiative { o.getInitiative() };
     int liveLength { o.getLiveLength() };
     int powerToReproduce { o.getPowerToReproduce() };
@@ -97,7 +97,7 @@ void save(Archive& ar, const Organism& o, const unsigned int version) {
 template <class Archive>
 void load(Archive& ar, Organism& o, const unsigned int version) {
     int power{ 0 };
-    std::string species{};
+    SpeciesCodes species{ SpeciesCodes::Unknown };
     int initiative{ 0 };
     int liveLength{ 0 };
     int powerToReproduce{ 0 };

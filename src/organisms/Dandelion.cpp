@@ -1,9 +1,10 @@
 #include "organisms/Dandelion.hpp"
+#include "organisms/SpeciesCodes.hpp"
 
 Dandelion::Dandelion(int power, int initiative, int liveLength, int powerToReproduce, Position position)
     : Plant(power, initiative, liveLength, powerToReproduce, position) {
-    setSpecies("P");
-    setSubspecies("D");
+    setSpecies(SpeciesCodes::Plant);
+    setSubspecies(SpeciesCodes::Dandelion);
 }
 
 Dandelion::Dandelion(int power, Position position)

@@ -32,10 +32,16 @@ void Position::setY(int y) {
 }
 
 void Position::move(int dx, int dy) {
-    setX(getX() + dx);
-    setY(getY() + dy);
+    int targetX = getX() + dx;
+    int targetY = getY() + dy;
+
+    validators::validateValueNotNegative(targetX, "X coordinate");
+    validators::validateValueNotNegative(targetY, "Y coordinate");
+
+    m_x = targetX;
+    m_y = targetY;
 }
 
-std::string Position::toString() {
+std::string Position::toString() const {
     return "(" + std::to_string(getX()) + ", " + std::to_string(getY()) + ")";
 }

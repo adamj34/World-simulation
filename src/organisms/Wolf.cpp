@@ -1,9 +1,10 @@
 #include "organisms/Wolf.hpp"
+#include "organisms/SpeciesCodes.hpp"
 
 Wolf::Wolf(int power, int initiative, int liveLength, int powerToReproduce, Position position)
     : Animal(power, initiative, liveLength, powerToReproduce, position) {
-    setSpecies("A");
-    setSubspecies("W");
+    setSpecies(SpeciesCodes::Animal);
+    setSubspecies(SpeciesCodes::Wolf);
 }
 
 Wolf::Wolf(int power, Position position)
@@ -25,7 +26,7 @@ Wolf::Wolf(const Wolf& other)
 std::optional<std::shared_ptr<Organism>> Wolf::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
     // Wolves attack only other animals
     for (const auto& organism : organismsToAttack) {
-        if (organism->getSpecies() == "A" && organism->getSubspecies() != this->getSubspecies()) {
+        if (organism->getSpecies() == SpeciesCodes::Animal && organism->getSubspecies() != this->getSubspecies()) {
             if (this->getPower() > organism->getPower()) {
                 return organism;
             }

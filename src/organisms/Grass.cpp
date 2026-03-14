@@ -1,9 +1,10 @@
 #include "organisms/Grass.hpp"
+#include "organisms/SpeciesCodes.hpp"
 
 Grass::Grass(int power, int initiative, int liveLength, int powerToReproduce, Position position)
     : Plant(power, initiative, liveLength, powerToReproduce, position) {
-    setSpecies("P");
-    setSubspecies("G");
+    setSpecies(SpeciesCodes::Plant);
+    setSubspecies(SpeciesCodes::Grass);
 }
 
 Grass::Grass(int power, Position position)

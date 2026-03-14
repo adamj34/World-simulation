@@ -1,6 +1,7 @@
 #include "World.hpp"
 #include "Position.hpp"
 #include "organisms/Organism.hpp"
+#include "organisms/SpeciesCodes.hpp"
 #include "validators.hpp"
 #include <fstream>
 #include <iostream>
@@ -33,7 +34,7 @@ bool World::isPositionAnimalFree(const Position& position) {
     auto organismsAtPosition = getOrganismsFromPosition(position);
     if (!organismsAtPosition.empty()) {
         for (const auto& organism : organismsAtPosition) {
-            if (organism->getSpecies() == "A") {
+            if (organism->getSpecies() == SpeciesCodes::Animal) {
                 return false;
             }
         }
@@ -75,7 +76,7 @@ std::vector<Position> World::getAnimalFreePositionsAround(std::vector<Position> 
 
 std::vector<Position> World::getValidPositionsAround(const std::shared_ptr<Organism>& organism) {
     auto positionsAround = getPositionsAround(organism);
-    if (organism->getSpecies() == "A") {
+    if (organism->getSpecies() == SpeciesCodes::Animal) {
         return getAnimalFreePositionsAround(positionsAround);
     } else {
         return getFreePositionsAround(positionsAround);
@@ -179,7 +180,7 @@ std::string World::toString() {
         for (int wX = 0; wX < getWorldX(); ++wX) {
             spec = getOrganismsFromPosition(Position(wX, wY));
             if (!spec.empty()) {
-                result += spec.front()->getSubspecies();
+                result += speciesCodeToSymbol(spec.front()->getSubspecies());
             } else {
                 result += m_separator;
             }

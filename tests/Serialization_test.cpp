@@ -3,6 +3,7 @@
 #include "serialization.hpp"
 #include "organisms/OrganismFactory.hpp"
 #include "organisms/Lineage.hpp"
+#include "organisms/SpeciesCodes.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <string> 
 
@@ -86,7 +87,7 @@ TEST_CASE("Single organism serialization", "[Serialization]") {
         boost::serialization::loadWorld(loadedWorld, filename);
         
         REQUIRE(loadedWorld.getOrganisms().size() == 1);
-        REQUIRE(loadedWorld.getOrganisms()[0]->getSubspecies() == "W");
+        REQUIRE(loadedWorld.getOrganisms()[0]->getSubspecies() == SpeciesCodes::Wolf);
         REQUIRE(loadedWorld.getOrganisms()[0]->getPosition().getX() == 3);
         REQUIRE(loadedWorld.getOrganisms()[0]->getPosition().getY() == 4);
         REQUIRE(loadedWorld.getOrganisms()[0]->getPower() == 15);
@@ -109,7 +110,7 @@ TEST_CASE("Single organism serialization", "[Serialization]") {
         World loadedWorld{};
         boost::serialization::loadWorld(loadedWorld, filename);
         
-        REQUIRE(loadedWorld.getOrganisms()[0]->getSubspecies() == "S");
+        REQUIRE(loadedWorld.getOrganisms()[0]->getSubspecies() == SpeciesCodes::Sheep);
         REQUIRE(loadedWorld.getOrganisms()[0]->getPosition().getX() == 5);
         REQUIRE(loadedWorld.getOrganisms()[0]->getPosition().getY() == 6);
     }
@@ -126,7 +127,7 @@ TEST_CASE("Single organism serialization", "[Serialization]") {
         World loadedWorld{};
         boost::serialization::loadWorld(loadedWorld, filename);
         
-        REQUIRE(loadedWorld.getOrganisms()[0]->getSubspecies() == "T");
+        REQUIRE(loadedWorld.getOrganisms()[0]->getSubspecies() == SpeciesCodes::Toadstool);
     }
 }
 
@@ -231,7 +232,7 @@ TEST_CASE("Loading overwrites previous world state", "[Serialization]") {
         REQUIRE(world2.getWorldX() == 10);
         REQUIRE(world2.getWorldY() == 10);
         REQUIRE(world2.getOrganisms().size() == 1);
-        REQUIRE(world2.getOrganisms()[0]->getSubspecies() == "W");
+        REQUIRE(world2.getOrganisms()[0]->getSubspecies() == SpeciesCodes::Wolf);
     }
 }
 

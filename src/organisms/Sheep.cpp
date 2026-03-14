@@ -1,9 +1,10 @@
 #include "organisms/Sheep.hpp"
+#include "organisms/SpeciesCodes.hpp"
 
 Sheep::Sheep(int power, int initiative, int liveLength, int powerToReproduce, Position position)
     : Animal(power, initiative, liveLength, powerToReproduce, position) {
-    setSpecies("A");
-    setSubspecies("S");
+    setSpecies(SpeciesCodes::Animal);
+    setSubspecies(SpeciesCodes::Sheep);
 }
 
 Sheep::Sheep(int power, Position position)
@@ -25,7 +26,7 @@ Sheep::Sheep(const Sheep& other)
 std::optional<std::shared_ptr<Organism>> Sheep::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {
     // sheep eats grass and dandelions
     for (const auto& organism : organismsToAttack) {
-        if (organism->getSubspecies() == "G" || organism->getSubspecies() == "D") {
+        if (organism->getSubspecies() == SpeciesCodes::Grass || organism->getSubspecies() == SpeciesCodes::Dandelion) {
             return organism;
         }
     }

@@ -89,17 +89,17 @@ int Organism::getDeathTurn() const {
     return m_lineageInfo.deathTurn;
 }
 
-std::string Organism::getSpecies() const {
+SpeciesCodes Organism::getSpecies() const {
     return m_species;
 }
-void Organism::setSpecies(std::string spec) {
+void Organism::setSpecies(SpeciesCodes spec) {
     m_species = spec;
 }
 
-std::string Organism::getSubspecies() const {
+SpeciesCodes Organism::getSubspecies() const {
     return m_subspecies;
 }
-void Organism::setSubspecies(std::string subspec) {
+void Organism::setSubspecies(SpeciesCodes subspec) {
     m_subspecies = subspec;
 }
 
@@ -117,7 +117,7 @@ void Organism::setDeathTurn(int deathTurn) {
 }
 
 std::string Organism::toString() const {
-    return "{ m_species: " + getSpecies() + ", power: " + std::to_string(getPower()) +
+    return "{ m_species: " + std::string(speciesCodeToSymbol(getSpecies())) + ", power: " + std::to_string(getPower()) +
            ", initiative: " + std::to_string(getInitiative()) + ", liveLength: " + std::to_string(getLiveLength()) +
            ", powerToReproduce: " + std::to_string(getPowerToReproduce()) + ", position: " + getPosition().toString() +
            "}";
