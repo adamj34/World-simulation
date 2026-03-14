@@ -96,7 +96,7 @@ bool Organism::canReproduce() const {
 }
 
 bool Organism::isAlive() const {
-    return m_lineageInfo.deathTurn == -1;
+    return m_lineageInfo.deathTurn == -1 && m_liveLength > 0;
 }
 
 void Organism::setDeathTurn(int deathTurn) {
