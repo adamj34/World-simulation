@@ -5,6 +5,7 @@
 #include "organisms/Sheep.hpp"
 #include "organisms/Toadstool.hpp"
 #include "organisms/Wolf.hpp"
+#include "organisms/Lineage.hpp"
 #include "organisms/OrganismFactory.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <print>
@@ -100,8 +101,8 @@ TEST_CASE("After an organism dies it is still present in ancestor history", "[Wo
     world.removeDeadOrganisms();
 
     REQUIRE(world.getOrganisms().size() == 1);
-    REQUIRE(org2->getAncestorHistory().size() == 1);
-    REQUIRE(org2->getAncestorHistory()[0]->getSubspecies() == "W");
+    REQUIRE(LineageService::getAncestorHistory(*org2).size() == 1);
+    REQUIRE(LineageService::getAncestorHistory(*org2)[0]->getSubspecies() == "W");
 }
 
 TEST_CASE("Organisms kill other animals according to their attack capabilities", "[World]") {

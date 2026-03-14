@@ -2,6 +2,7 @@
 #include "World.hpp"
 #include "serialization.hpp"
 #include "organisms/OrganismFactory.hpp"
+#include "organisms/Lineage.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <string> 
 
@@ -181,7 +182,7 @@ TEST_CASE("Organism with lineage info serialization", "[Serialization]") {
         
         REQUIRE(loadedWorld.getOrganisms().size() == 2);
         auto loadedChild = loadedWorld.getOrganisms()[1];
-        auto ancestors = loadedChild->getAncestorHistory();
+        auto ancestors = LineageService::getAncestorHistory(*loadedChild);
         REQUIRE(ancestors.size() == 1);
     }
 }
