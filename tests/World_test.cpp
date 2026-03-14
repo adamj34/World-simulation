@@ -167,3 +167,238 @@ TEST_CASE("Organisms kill other animals according to their attack capabilities",
         REQUIRE(resultGrass.value()->getSubspecies() == "G");
     }
 }
+
+TEST_CASE("World constructors", "[World]") {
+    SECTION("Default constructor creates world with default dimensions") {
+        World world{};
+        REQUIRE(world.getWorldX() == 6);
+        REQUIRE(world.getWorldY() == 6);
+        REQUIRE(world.getStartWorldX() == 0);
+        REQUIRE(world.getStartWorldY() == 0);
+    }
+
+    SECTION("Parameterized constructor with dimensions") {
+        World world(10, 15);
+        REQUIRE(world.getWorldX() == 10);
+        REQUIRE(world.getWorldY() == 15);
+    }
+
+    SECTION("Parameterized constructor with all parameters") {
+        World world(10, 15, 2, 3);
+        REQUIRE(world.getWorldX() == 10);
+        REQUIRE(world.getWorldY() == 15);
+        REQUIRE(world.getStartWorldX() == 2);
+        REQUIRE(world.getStartWorldY() == 3);
+    }
+
+    SECTION("Constructor with zero dimensions throws exception") {
+        REQUIRE_THROWS_AS([]() { World world(0, 0); }(), std::invalid_argument);
+    }
+}
+
+TEST_CASE("World equality operator", "[World]") {
+    SECTION("Two worlds with same dimensions are equal") {
+        World world1(10, 15, 2, 3);
+        World world2(10, 15, 2, 3);
+        REQUIRE(world1 == world2);
+    }
+
+    SECTION("Two empty default worlds are equal") {
+        World world1{};
+        World world2{};
+        REQUIRE(world1 == world2);
+    }
+
+    SECTION("Two worlds with different X dimensions are not equal") {
+        World world1(10, 15);
+        World world2(12, 15);
+        REQUIRE(!(world1 == world2));
+    }
+
+    SECTION("Two worlds with different Y dimensions are not equal") {
+        World world1(10, 15);
+        World world2(10, 20);
+        REQUIRE(!(world1 == world2));
+    }
+}
+
+TEST_CASE("World organism retrieval from position", "[World]") {
+    World world{};
+    OrganismFactory factory{};
+
+    SECTION("getOrganismsFromPosition returns empty vector when no organisms at position") {
+        Position pos(2, 3);
+        auto organisms = world.getOrganismsFromPosition(pos);
+        REQUIRE(organisms.empty());
+    }
+
+    SECTION("getOrganismsFromPosition returns organism when at position") {
+        auto wolf = factory.createWolf(Position(3, 4));
+        world.addOrganism(wolf);
+        
+        auto organisms = world.getOrganismsFromPosition(Position(3, 4));
+        REQUIRE(organisms.size() == 1);
+        REQUIRE(organisms[0]->getSubspecies() == "W");
+    }
+
+    SECTION("getOrganismsFromPosition returns multiple organisms at same position") {
+        auto wolf = factory.createWolf(Position(3, 4));
+        auto sheep = factory.createSheep(Position(3, 4));
+        auto grass = factory.createGrass(Position(3, 4));
+        
+        world.addOrganism(wolf);
+        world.addOrganism(sheep);
+        world.addOrganism(grass);
+        
+        auto organisms = world.getOrganismsFromPosition(Position(3, 4));
+        REQUIRE(organisms.size() == 3);
+    }
+}
+
+TEST_CASE("World organism power and live length modifications", "[World]") {
+    World world{};
+    OrganismFactory factory{};
+
+    SECTION("increaseOrganismsPowerBy increases power of all organisms") {
+        auto wolf = factory.createWolf();
+        auto sheep = factory.createSheep();
+        auto grass = factory.createGrass();
+        
+        int initialWolfPower = wolf->getPower();
+        int initialSheepPower = sheep->getPower();
+        int initialGrassPower = grass->getPower();
+        
+        world.addOrganism(wolf);
+        world.addOrganism(sheep);
+        world.addOrganism(grass);
+        
+        world.increaseOrganismsPowerBy(3);
+        
+        REQUIRE(wolf->getPower() == initialWolfPower + 3);
+        REQUIRE(sheep->getPower() == initialSheepPower + 3);
+        REQUIRE(grass->getPower() == initialGrassPower + 3);
+    }
+
+    SECTION("decreaseOrganismsLiveLengthBy decreases live length of all organisms") {
+        auto wolf = factory.createWolf();
+        auto sheep = factory.createSheep();
+        auto grass = factory.createGrass();
+        
+        wolf->setLiveLength(10);
+        sheep->setLiveLength(15);
+        grass->setLiveLength(20);
+        
+        world.addOrganism(wolf);
+        world.addOrganism(sheep);
+        world.addOrganism(grass);
+        
+        world.decreaseOrganismsLiveLengthBy(2);
+        
+        REQUIRE(wolf->getLiveLength() == 8);
+        REQUIRE(sheep->getLiveLength() == 13);
+        REQUIRE(grass->getLiveLength() == 18);
+    }
+
+    SECTION("increaseOrganismsPowerBy doesn't affect empty world") {
+        World emptyWorld{};
+        emptyWorld.increaseOrganismsPowerBy(5);
+        REQUIRE(emptyWorld.getOrganisms().empty());
+    }
+}
+
+TEST_CASE("World organism play turn eligibility", "[World]") {
+    World world{};
+    OrganismFactory factory{};
+
+    SECTION("Organism can play turn when alive") {
+        auto wolf = factory.createWolf();
+        REQUIRE(world.organismCanPlayTurn(wolf) == true);
+    }
+
+    SECTION("Organism cannot play turn when dead") {
+        auto wolf = factory.createWolf();
+        wolf->setDeathTurn(5);
+        REQUIRE(world.organismCanPlayTurn(wolf) == false);
+    }
+
+    SECTION("Organism cannot play turn when live length is 0") {
+        auto wolf = factory.createWolf();
+        wolf->setLiveLength(0);
+        REQUIRE(world.organismCanPlayTurn(wolf) == false);
+    }
+}
+
+TEST_CASE("World positions around organism", "[World]") {
+    World world(10, 10);
+    OrganismFactory factory{};
+
+    SECTION("getPositionsAround returns correct number of adjacent positions") {
+        auto organism = factory.createWolf(Position(5, 5));
+        world.addOrganism(organism);
+        
+        auto positions = world.getPositionsAround(organism);
+        REQUIRE(positions.size() == 8);
+    }
+
+    SECTION("getPositionsAround for organism at corner has fewer positions") {
+        auto organism = factory.createWolf(Position(0, 0));
+        world.addOrganism(organism);
+        
+        auto positions = world.getPositionsAround(organism);
+        REQUIRE(positions.size() == 3);
+    }
+
+    SECTION("getValidPositionsAround returns only free positions for animal and plant") {
+        auto wolf = factory.createWolf(Position(5, 5));
+        auto grass = factory.createGrass(Position(5, 6));
+        
+        world.addOrganism(wolf);
+        world.addOrganism(grass);
+        
+        auto validPositions = world.getValidPositionsAround(wolf);
+        REQUIRE(validPositions.size() == 8);
+    }
+
+    SECTION("getValidPositionsAround returns only free positions for animal and animal") {
+        auto wolf = factory.createWolf(Position(5, 5));
+        auto sheep = factory.createSheep(Position(5, 6));
+        
+        world.addOrganism(wolf);
+        world.addOrganism(sheep);
+        
+        auto validPositions = world.getValidPositionsAround(wolf);
+        REQUIRE(validPositions.size() == 7);
+    }
+}
+
+TEST_CASE("World with multiple organisms maintains integrity", "[World]") {
+    World world{};
+    OrganismFactory factory{};
+
+    SECTION("Adding and removing organisms maintains world state") {
+        auto wolf1 = factory.createWolf();
+        auto wolf2 = factory.createWolf();
+        auto sheep = factory.createSheep();
+        
+        world.addOrganism(wolf1);
+        world.addOrganism(wolf2);
+        world.addOrganism(sheep);
+        
+        world.markOrganismAsDead(wolf1, 5);
+        world.removeDeadOrganisms();
+        REQUIRE(world.getOrganisms().size() == 2);
+    }
+
+    SECTION("Removing all organisms leaves empty world") {
+        auto wolf = factory.createWolf();
+        auto sheep = factory.createSheep();
+        
+        world.addOrganism(wolf);
+        world.addOrganism(sheep);
+        world.markOrganismAsDead(wolf, 1);
+        world.markOrganismAsDead(sheep, 2);
+        world.removeDeadOrganisms();
+        
+        REQUIRE(world.getOrganisms().empty());
+    }
+}
