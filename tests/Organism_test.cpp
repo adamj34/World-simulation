@@ -128,3 +128,134 @@ TEST_CASE("Organism class lineage info", "[Organism]") {
         REQUIRE(ancestors.empty());
     }
 }
+
+
+TEST_CASE("Organism reproduction and alive logic", "[Organism]") {
+    OrganismFactory factory{};
+
+    SECTION("canReproduce returns true when power equals powerToReproduce") {
+        Position pos{ 3, 4 };
+        Wolf org(5, pos);
+        org.setPowerToReproduce(5);
+        REQUIRE(org.canReproduce() == true);
+    }
+
+    SECTION("canReproduce returns true when power exceeds powerToReproduce") {
+        Position pos{ 3, 4 };
+        Wolf org(10, pos);
+        org.setPowerToReproduce(5);
+        REQUIRE(org.canReproduce() == true);
+    }
+
+    SECTION("canReproduce returns false when power is below powerToReproduce") {
+        Position pos{ 3, 4 };
+        Wolf org(3, pos);
+        org.setPowerToReproduce(5);
+        REQUIRE(org.canReproduce() == false);
+    }
+
+    SECTION("isAlive returns true for newly created organism") {
+        auto org{ factory.createWolf() };
+        REQUIRE(org->isAlive() == true);
+    }
+
+    SECTION("isAlive returns false after organism is marked dead") {
+        auto org{ factory.createWolf() };
+        org->setDeathTurn(10);
+        REQUIRE(org->isAlive() == false);
+    }
+
+    SECTION("setDeathTurn cannot be negative") {
+        Position pos{ 3, 4 };
+        Wolf org(5, pos);
+        REQUIRE_THROWS_AS(org.setDeathTurn(-1), std::invalid_argument);
+    }
+
+    SECTION("setDeathTurn stores the death turn correctly") {
+        Position pos{ 3, 4 };
+        Wolf org(5, pos);
+        org.setDeathTurn(25);
+        REQUIRE(org.getLineageInfo().deathTurn == 25);
+    }
+}
+
+TEST_CASE("Organism equality operator", "[Organism]") {
+    SECTION("Two organisms with same properties are equal") {
+        Position pos{ 3, 4 };
+        Wolf org1(5, pos);
+        Wolf org2(5, pos);
+        org1.setSpecies("A");
+        org2.setSpecies("A");
+        REQUIRE(org1 == org2);
+    }
+
+    SECTION("Two organisms with different power are not equal") {
+        Position pos{ 3, 4 };
+        Wolf org1(5, pos);
+        Wolf org2(10, pos);
+        org1.setSpecies("A");
+        org2.setSpecies("A");
+        REQUIRE(!(org1 == org2));
+    }
+
+    SECTION("Two organisms with different initiative are not equal") {
+        Position pos{ 3, 4 };
+        Wolf org1(5, pos);
+        Wolf org2(5, pos);
+        org1.setInitiative(1);
+        org2.setInitiative(2);
+        org1.setSpecies("A");
+        org2.setSpecies("A");
+        REQUIRE(!(org1 == org2));
+    }
+
+    SECTION("Two organisms with different position are not equal") {
+        Wolf org1(5, Position{ 3, 4 });
+        Wolf org2(5, Position{ 5, 6 });
+        org1.setSpecies("A");
+        org2.setSpecies("A");
+        REQUIRE(!(org1 == org2));
+    }
+
+    SECTION("Two organisms with different species are not equal") {
+        Position pos{ 3, 4 };
+        Wolf org1(5, pos);
+        Wolf org2(5, pos);
+        org1.setSpecies("A");
+        org2.setSpecies("B");
+        REQUIRE(!(org1 == org2));
+    }
+}
+
+TEST_CASE("Organism full constructor", "[Organism]") {
+    SECTION("Full parameterized constructor initializes all members correctly") {
+        Position pos{ 5, 6 };
+        Wolf org(10, 3, 20, 5, pos);
+        REQUIRE(org.getPower() == 10);
+        REQUIRE(org.getInitiative() == 3);
+        REQUIRE(org.getLiveLength() == 20);
+        REQUIRE(org.getPowerToReproduce() == 5);
+        REQUIRE(org.getPosition().getX() == 5);
+        REQUIRE(org.getPosition().getY() == 6);
+    }
+
+    SECTION("Full parameterized constructor validates power is not negative") {
+        Position pos{ 5, 6 };
+        REQUIRE_THROWS_AS(Wolf(-1, 3, 20, 5, pos), std::invalid_argument);
+    }
+
+    SECTION("Full parameterized constructor validates initiative is not negative") {
+        Position pos{ 5, 6 };
+        REQUIRE_THROWS_AS(Wolf(10, -1, 20, 5, pos), std::invalid_argument);
+    }
+
+    SECTION("Full parameterized constructor validates liveLength is not negative") {
+        Position pos{ 5, 6 };
+        REQUIRE_THROWS_AS(Wolf(10, 3, -1, 5, pos), std::invalid_argument);
+    }
+
+    SECTION("Full parameterized constructor validates powerToReproduce is not negative") {
+        Position pos{ 5, 6 };
+        REQUIRE_THROWS_AS(Wolf(10, 3, 20, -1, pos), std::invalid_argument);
+    }
+}
