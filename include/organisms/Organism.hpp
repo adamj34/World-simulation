@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LineageInfo.hpp"
+#include "Lineage.hpp"
 #include "Position.hpp"
 #include <string>
 #include <memory>
@@ -57,6 +57,8 @@ class Organism {
 
         LineageInfo getLineageInfo() const;
         void setLineageInfo(LineageInfo lineageInfo);
+
+        std::shared_ptr<Organism> getParent() const;
 
         std::string getSpecies() const;
         void setSpecies(std::string spec);

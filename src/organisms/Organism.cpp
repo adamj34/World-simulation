@@ -77,6 +77,10 @@ void Organism::setLineageInfo(LineageInfo lineageInfo) {
     m_lineageInfo = lineageInfo;
 }
 
+std::shared_ptr<Organism> Organism::getParent() const {
+    return m_lineageInfo.parent;
+}
+
 std::string Organism::getSpecies() const {
     return m_species;
 }
