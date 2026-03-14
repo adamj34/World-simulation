@@ -8,11 +8,15 @@ Grass::Grass(int power, int initiative, int liveLength, int powerToReproduce, Po
 }
 
 Grass::Grass(int power, Position position)
-    : Grass(power, 0, 6, 3, position) {
+    : Grass(power,
+            species_defaults::grass.initiative,
+            species_defaults::grass.liveLength,
+            species_defaults::grass.powerToReproduce,
+            position) {
 }
 
 Grass::Grass(Position position)
-    : Grass(0, position) {
+    : Grass(species_defaults::grass.power, position) {
 }
 
 Grass::Grass()
@@ -20,7 +24,11 @@ Grass::Grass()
 }
 
 Grass::Grass(const Grass& other)
-    : Grass(0, other.getInitiative(), 6, other.getPowerToReproduce(), other.getPosition()) {
+    : Grass(species_defaults::grass.power,
+            other.getInitiative(),
+            species_defaults::grass.liveLength,
+            other.getPowerToReproduce(),
+            other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Grass::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {

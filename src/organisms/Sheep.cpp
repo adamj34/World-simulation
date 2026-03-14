@@ -8,11 +8,15 @@ Sheep::Sheep(int power, int initiative, int liveLength, int powerToReproduce, Po
 }
 
 Sheep::Sheep(int power, Position position)
-    : Sheep(power, 3, 10, 6, std::move(position)) {
+    : Sheep(power,
+            species_defaults::sheep.initiative,
+            species_defaults::sheep.liveLength,
+            species_defaults::sheep.powerToReproduce,
+            std::move(position)) {
 }
 
 Sheep::Sheep(Position position)
-    : Sheep(3, std::move(position)) {
+    : Sheep(species_defaults::sheep.power, std::move(position)) {
 }
 
 Sheep::Sheep()
@@ -20,7 +24,11 @@ Sheep::Sheep()
 }
 
 Sheep::Sheep(const Sheep& other)
-    : Sheep(3, other.getInitiative(), 10, other.getPowerToReproduce(), other.getPosition()) {
+    : Sheep(species_defaults::sheep.power,
+            other.getInitiative(),
+            species_defaults::sheep.liveLength,
+            other.getPowerToReproduce(),
+            other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Sheep::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {

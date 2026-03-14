@@ -8,11 +8,15 @@ Dandelion::Dandelion(int power, int initiative, int liveLength, int powerToRepro
 }
 
 Dandelion::Dandelion(int power, Position position)
-    : Dandelion(power, 0, 6, 2, position) {
+    : Dandelion(power,
+                species_defaults::dandelion.initiative,
+                species_defaults::dandelion.liveLength,
+                species_defaults::dandelion.powerToReproduce,
+                position) {
 }
 
 Dandelion::Dandelion(Position position)
-    : Dandelion(0, position) {
+    : Dandelion(species_defaults::dandelion.power, position) {
 }
 
 Dandelion::Dandelion()
@@ -20,7 +24,11 @@ Dandelion::Dandelion()
 }
 
 Dandelion::Dandelion(const Dandelion& other)
-    : Dandelion(0, other.getInitiative(), 6, other.getPowerToReproduce(), other.getPosition()) {
+    : Dandelion(species_defaults::dandelion.power,
+                other.getInitiative(),
+                species_defaults::dandelion.liveLength,
+                other.getPowerToReproduce(),
+                other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Dandelion::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {

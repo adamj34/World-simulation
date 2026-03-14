@@ -8,11 +8,15 @@ Wolf::Wolf(int power, int initiative, int liveLength, int powerToReproduce, Posi
 }
 
 Wolf::Wolf(int power, Position position)
-    : Wolf(power, 5, 20, 16, std::move(position)) {
+    : Wolf(power,
+           species_defaults::wolf.initiative,
+           species_defaults::wolf.liveLength,
+           species_defaults::wolf.powerToReproduce,
+           std::move(position)) {
 }
 
 Wolf::Wolf(Position position)
-    : Wolf(8, std::move(position)) {
+    : Wolf(species_defaults::wolf.power, std::move(position)) {
 }
 
 Wolf::Wolf()
@@ -20,7 +24,11 @@ Wolf::Wolf()
 }
 
 Wolf::Wolf(const Wolf& other)
-    : Wolf(8, other.getInitiative(), 20, other.getPowerToReproduce(), other.getPosition()) {
+    : Wolf(species_defaults::wolf.power,
+           other.getInitiative(),
+           species_defaults::wolf.liveLength,
+           other.getPowerToReproduce(),
+           other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Wolf::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {

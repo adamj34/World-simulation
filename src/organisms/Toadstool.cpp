@@ -8,11 +8,15 @@ Toadstool::Toadstool(int power, int initiative, int liveLength, int powerToRepro
 }
 
 Toadstool::Toadstool(int power, Position position)
-    : Toadstool(power, 0, 12, 4, std::move(position)) {
+    : Toadstool(power,
+                species_defaults::toadstool.initiative,
+                species_defaults::toadstool.liveLength,
+                species_defaults::toadstool.powerToReproduce,
+                std::move(position)) {
 }
 
 Toadstool::Toadstool(Position position)
-    : Toadstool(0, std::move(position)) {
+    : Toadstool(species_defaults::toadstool.power, std::move(position)) {
 }
 
 Toadstool::Toadstool()
@@ -20,7 +24,11 @@ Toadstool::Toadstool()
 }
 
 Toadstool::Toadstool(const Toadstool& other)
-    : Toadstool(0, other.getInitiative(), 12, other.getPowerToReproduce(), other.getPosition()) {
+    : Toadstool(species_defaults::toadstool.power,
+                other.getInitiative(),
+                species_defaults::toadstool.liveLength,
+                other.getPowerToReproduce(),
+                other.getPosition()) {
 }
 
 std::optional<std::shared_ptr<Organism>> Toadstool::attack(std::vector<std::shared_ptr<Organism>> organismsToAttack) {

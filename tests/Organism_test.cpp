@@ -1,5 +1,6 @@
 #include "organisms/Organism.hpp"
 #include "organisms/OrganismFactory.hpp"
+#include "organisms/Sheep.hpp"
 #include "organisms/SpeciesCodes.hpp"
 #include "organisms/Wolf.hpp"
 #include <catch2/catch_test_macros.hpp>
@@ -55,13 +56,24 @@ TEST_CASE("Organism class core functionality", "[Organism]") {
 }
 
 TEST_CASE("Organism class copy constructor and assignment operator", "[Organism]") {
-    SECTION("Copy constructor creates a new object with the same values") {
+    SECTION("Wolf copy constructor applies species defaults for selected stats") {
         Position pos{ 3, 4 };
         Wolf org1(5, pos);
-        Wolf org2 = { org1 };          // Copy constructor
-        REQUIRE(org2.getPower() == 8); // Default power for Wolf
+        Wolf org2 = { org1 }; // Copy constructor
+        REQUIRE(org2.getPower() == 8);
+        REQUIRE(org2.getLiveLength() == 20);
         REQUIRE(org2.getPosition().getX() == 3);
         REQUIRE(org2.getPosition().getY() == 4);
+    }
+
+    SECTION("Sheep copy constructor applies species defaults for selected stats") {
+        Position pos{ 1, 2 };
+        Sheep org1(9, pos);
+        Sheep org2 = { org1 };
+        REQUIRE(org2.getPower() == 3);
+        REQUIRE(org2.getLiveLength() == 10);
+        REQUIRE(org2.getPosition().getX() == 1);
+        REQUIRE(org2.getPosition().getY() == 2);
     }
 
     SECTION("Copy assignment operator assigns values correctly") {
