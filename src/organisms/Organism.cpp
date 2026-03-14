@@ -81,6 +81,14 @@ std::shared_ptr<Organism> Organism::getParent() const {
     return m_lineageInfo.parent;
 }
 
+int Organism::getBirthTurn() const {
+    return m_lineageInfo.birthTurn;
+}
+
+int Organism::getDeathTurn() const {
+    return m_lineageInfo.deathTurn;
+}
+
 std::string Organism::getSpecies() const {
     return m_species;
 }
@@ -100,7 +108,7 @@ bool Organism::canReproduce() const {
 }
 
 bool Organism::isAlive() const {
-    return m_lineageInfo.deathTurn == -1 && m_liveLength > 0;
+    return getDeathTurn() == -1 && m_liveLength > 0;
 }
 
 void Organism::setDeathTurn(int deathTurn) {

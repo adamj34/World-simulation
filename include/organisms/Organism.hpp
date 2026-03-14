@@ -59,6 +59,8 @@ class Organism {
         void setLineageInfo(LineageInfo lineageInfo);
 
         std::shared_ptr<Organism> getParent() const;
+        int getBirthTurn() const;
+        int getDeathTurn() const;
 
         std::string getSpecies() const;
         void setSpecies(std::string spec);
