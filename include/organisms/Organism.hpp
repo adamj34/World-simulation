@@ -74,10 +74,6 @@ class Organism {
 
         void setDeathTurn(int deathTurn);
 
-        std::vector<std::shared_ptr<Organism>> getAncestorHistory() const;
-
-        void printAncestorHistory() const;
-
         std::string toString() const;
         
         virtual void move(const Position& newPosition) = 0;

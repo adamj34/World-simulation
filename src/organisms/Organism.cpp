@@ -116,25 +116,6 @@ void Organism::setDeathTurn(int deathTurn) {
     m_lineageInfo.deathTurn = deathTurn;
 }
 
-std::vector<std::shared_ptr<Organism>> Organism::getAncestorHistory() const {
-    std::vector<std::shared_ptr<Organism>> ancestors;
-    std::shared_ptr<Organism> current = m_lineageInfo.parent;
-    while (current) {
-        ancestors.push_back(current);
-        current = current->getLineageInfo().parent;
-    }
-
-    return ancestors;
-}
-
-void Organism::printAncestorHistory() const {
-    auto ancestors{ getAncestorHistory() };
-    for (const auto& ancestor : ancestors) {
-        std::println("Ancestor Born at turn: {}, died: {}", ancestor->getLineageInfo().birthTurn,
-                     ancestor->getLineageInfo().deathTurn);
-    }
-}
-
 std::string Organism::toString() const {
     return "{ m_species: " + getSpecies() + ", power: " + std::to_string(getPower()) +
            ", initiative: " + std::to_string(getInitiative()) + ", liveLength: " + std::to_string(getLiveLength()) +

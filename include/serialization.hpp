@@ -14,7 +14,7 @@
 #include "Position.hpp"
 #include "World.hpp"
 #include "organisms/Animal.hpp"
-#include "organisms/LineageInfo.hpp"
+#include "organisms/Lineage.hpp"
 #include "organisms/Organism.hpp"
 #include "organisms/Plant.hpp"
 

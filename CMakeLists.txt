@@ -37,7 +37,7 @@ src/organisms/Grass.cpp
 src/organisms/Toadstool.cpp
 src/organisms/Wolf.cpp
 src/organisms/Sheep.cpp
-src/organisms/LineageInfo.cpp
+src/organisms/Lineage.cpp
 src/organisms/OrganismFactory.cpp
 src/validators.cpp
 src/Position.cpp  
@@ -55,6 +55,7 @@ add_executable(tests
   tests/Position_test.cpp
   tests/Organism_test.cpp
   tests/Serialization_test.cpp
+  tests/Lineage_test.cpp
 )
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain worldlib Boost::serialization) 
