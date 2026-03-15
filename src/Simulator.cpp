@@ -53,7 +53,7 @@ void Simulator::performAttack(const std::shared_ptr<Organism>& organism) {
     }
 }
 
-void Simulator::performReproduction(const std::shared_ptr<Organism>& organism, std::vector<Position>& freePositions) {
+void Simulator::performReproduction(const std::shared_ptr<Organism>& organism, const std::vector<Position>& freePositions) {
     auto newOrganism = organism->reproduce();
     if (newOrganism.has_value() && !freePositions.empty()) {
         int randomPositionIndex = pickRandomPosition(freePositions);

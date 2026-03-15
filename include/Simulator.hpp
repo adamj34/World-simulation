@@ -16,7 +16,7 @@ class Simulator {
         void playTurnForOrganism(const std::shared_ptr<Organism>& organism);
 
         void performAttack(const std::shared_ptr<Organism>& organism);
-        void performReproduction(const std::shared_ptr<Organism>& organism, std::vector<Position>& freePositions);
+        void performReproduction(const std::shared_ptr<Organism>& organism, const std::vector<Position>& freePositions);
         void performMove(const std::shared_ptr<Organism>& organism, const std::vector<Position>& freePositions);
 
 
