@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ISimulationWorld.hpp"
+#include "simulation/ISimulationWorld.hpp"
 #include "organisms/Organism.hpp"
 #include <ctime>
 #include <random>

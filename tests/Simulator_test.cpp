@@ -1,5 +1,5 @@
-#include "Simulator.hpp"
-#include "ISimulationWorld.hpp"
+#include "simulation/Simulator.hpp"
+#include "simulation/ISimulationWorld.hpp"
 #include "World.hpp"
 #include "organisms/OrganismFactory.hpp"
 #include <catch2/catch_test_macros.hpp>
