@@ -39,10 +39,10 @@ src/organisms/Wolf.cpp
 src/organisms/Sheep.cpp
 src/organisms/Lineage.cpp
 src/organisms/OrganismFactory.cpp
+src/simulation/Simulator.cpp
 src/validators.cpp
 src/Position.cpp  
 src/World.cpp
-src/Simulator.cpp
 )
 
 target_link_libraries(worldlib PRIVATE Boost::serialization)
