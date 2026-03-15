@@ -1,4 +1,4 @@
-#include "simulation/Simulator.hpp"
+#include "Simulator.hpp"
 #include "World.hpp"
 #include "serialization.hpp"
 #include "organisms/OrganismFactory.hpp"

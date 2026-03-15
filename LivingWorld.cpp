@@ -1,5 +1,5 @@
 #include "Position.hpp"
-#include "simulation/Simulator.hpp"
+#include "Simulator.hpp"
 #include "World.hpp"
 #include "organisms/Animal.hpp"
 #include "organisms/Grass.hpp"

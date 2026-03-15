@@ -1,6 +1,6 @@
 #pragma once
 
-#include "simulation/ISimulationWorld.hpp"
+#include "ISimulationWorld.hpp"
 #include <random>
 
 class Simulator {
