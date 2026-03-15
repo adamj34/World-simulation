@@ -56,6 +56,7 @@ add_executable(tests
   tests/Organism_test.cpp
   tests/Serialization_test.cpp
   tests/Lineage_test.cpp
+  tests/Simulator_test.cpp
 )
 
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain worldlib Boost::serialization) 

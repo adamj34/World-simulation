@@ -1,10 +1,11 @@
 #pragma once
 
 #include "World.hpp"
+#include <cstdint>
 
 class Simulator {
     private:
-        World m_world;
+        World& m_world;
         int m_turn{ 0 };
         std::mt19937 m_rng{ std::random_device{}() };
 
@@ -20,6 +21,7 @@ class Simulator {
 
     public:
         explicit Simulator(World& world);
+        Simulator(World& world, std::uint32_t seed);
 
         int getTurn() const;
         void setTurn(int turn);

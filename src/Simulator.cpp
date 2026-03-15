@@ -4,7 +4,12 @@
 #include <print>
 
 Simulator::Simulator(World& world)
-    : m_world(world) {
+    : Simulator(world, std::random_device{}()) {
+}
+
+Simulator::Simulator(World& world, std::uint32_t seed)
+    : m_world(world)
+    , m_rng(seed) {
 }
 
 int Simulator::getTurn() const {
