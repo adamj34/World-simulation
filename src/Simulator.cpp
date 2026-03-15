@@ -3,11 +3,11 @@
 #include "World.hpp"
 #include <print>
 
-Simulator::Simulator(World& world)
+Simulator::Simulator(ISimulationWorld& world)
     : Simulator(world, std::random_device{}()) {
 }
 
-Simulator::Simulator(World& world, std::uint32_t seed)
+Simulator::Simulator(ISimulationWorld& world, std::uint32_t seed)
     : m_world(world)
     , m_rng(seed) {
 }
@@ -25,7 +25,7 @@ int Simulator::pickRandomPosition(const std::vector<Position>& positions) {
     return distrib(m_rng);
 }
 
-void Simulator::applyTurnRules(const std::vector<std::shared_ptr<Organism>>& organisms) {
+void Simulator::applyTurnRules() {
     m_world.increaseOrganismsPowerBy(1);
     m_world.decreaseOrganismsLiveLengthBy(1);
     m_world.removeDeadOrganisms();
@@ -86,7 +86,7 @@ void Simulator::runSimulation(int numberOfTurns) {
     for (int i = 0; i < numberOfTurns; ++i) {
         std::println("Turn: {}\n{}", m_turn, m_world.toString());
         playTurn();
-        applyTurnRules(m_world.getOrganisms());
+        applyTurnRules();
         m_turn++;
     }
 }

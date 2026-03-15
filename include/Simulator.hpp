@@ -1,16 +1,17 @@
 #pragma once
 
-#include "World.hpp"
+#include "ISimulationWorld.hpp"
 #include <cstdint>
+#include <random>
 
 class Simulator {
     private:
-        World& m_world;
+        ISimulationWorld& m_world;
         int m_turn{ 0 };
         std::mt19937 m_rng{ std::random_device{}() };
 
         int pickRandomPosition(const std::vector<Position>& positions);
-        void applyTurnRules(const std::vector<std::shared_ptr<Organism>>& organisms);
+        void applyTurnRules();
 
         void playTurnForOrganism(const std::shared_ptr<Organism>& organism);
 
@@ -20,8 +21,8 @@ class Simulator {
 
 
     public:
-        explicit Simulator(World& world);
-        Simulator(World& world, std::uint32_t seed);
+        explicit Simulator(ISimulationWorld& world);
+        Simulator(ISimulationWorld& world, std::uint32_t seed);
 
         int getTurn() const;
         void setTurn(int turn);

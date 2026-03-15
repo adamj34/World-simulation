@@ -1,12 +1,13 @@
 #pragma once
 
+#include "ISimulationWorld.hpp"
 #include "organisms/Organism.hpp"
 #include <ctime>
 #include <random>
 #include <string>
 #include <vector>
 
-class World {
+class World : public ISimulationWorld {
     private:
         int m_worldX{ 6 };
         int m_worldY{ 6 };
@@ -38,18 +39,18 @@ class World {
         int getWorldY() const;
         void setWorldY(int worldY);
 
-        const std::vector<std::shared_ptr<Organism>>& getOrganisms() const;
+        const std::vector<std::shared_ptr<Organism>>& getOrganisms() const override;
         void setOrganisms(const std::vector<std::shared_ptr<Organism>>& organisms);
 
-        void markOrganismAsDead(const std::shared_ptr<Organism>& organism, int deathTurn);
-        void addOrganism(std::shared_ptr<Organism> organism);
-        std::vector<std::shared_ptr<Organism>> getOrganismsFromPosition(const Position& positionToCheck);
-        std::vector<Position> getPositionsAround(const std::shared_ptr<Organism>& organism);
-        std::vector<Position> getValidPositionsAround(const std::shared_ptr<Organism>& organism);
-        void removeDeadOrganisms();
-        bool organismCanPlayTurn(const std::shared_ptr<Organism>& organism) const;
-        void increaseOrganismsPowerBy(int increment);
-        void decreaseOrganismsLiveLengthBy(int decrement);
+        void markOrganismAsDead(const std::shared_ptr<Organism>& organism, int deathTurn) override;
+        void addOrganism(std::shared_ptr<Organism> organism) override;
+        std::vector<std::shared_ptr<Organism>> getOrganismsFromPosition(const Position& positionToCheck) override;
+        std::vector<Position> getPositionsAround(const std::shared_ptr<Organism>& organism) override;
+        std::vector<Position> getValidPositionsAround(const std::shared_ptr<Organism>& organism) override;
+        void removeDeadOrganisms() override;
+        bool organismCanPlayTurn(const std::shared_ptr<Organism>& organism) const override;
+        void increaseOrganismsPowerBy(int increment) override;
+        void decreaseOrganismsLiveLengthBy(int decrement) override;
 
-        std::string toString();
+        std::string toString() override;
 };
