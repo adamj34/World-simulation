@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ISimulationWorld.hpp"
-#include <cstdint>
 #include <random>
 
 class Simulator {
